@@ -78,7 +78,7 @@
         feedback: parseFloat(document.getElementById('feedback').value)
       };
 
-      const res = await fetch('http://localhost:5000/api/estimate', {
+      const res = await fetch('https://graduate-student-performance-analysis.onrender.com/api/estimate', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload)
