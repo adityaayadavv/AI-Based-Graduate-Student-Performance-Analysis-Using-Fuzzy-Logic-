@@ -42,26 +42,31 @@ demand['medium'] = fuzz.trimf(demand.universe, [4.5, 6.5, 8])
 demand['high'] = fuzz.trimf(demand.universe, [7.5, 10, 10])
 
 rules = [
-    ctrl.Rule(cgpa['high'] & po['high'] & tech_contribution['high'], demand['high']),
-    ctrl.Rule(cgpa['medium'] & po['high'] & tech_contribution['high'], demand['high']),
-    ctrl.Rule(cgpa['medium'] & po['medium'] & tech_contribution['medium'], demand['medium']),
-    ctrl.Rule(cgpa['low'] & po['low'] & tech_contribution['low'], demand['low']),
-    ctrl.Rule(cgpa['low'] & project_outcome['low'], demand['low']),
-    ctrl.Rule(project_outcome['high'] & tech_contribution['high'], demand['high']),
-    ctrl.Rule(project_outcome['medium'] & feedback['excellent'], demand['medium']),
-    ctrl.Rule(cgpa['high'] & feedback['excellent'], demand['high']),
-    ctrl.Rule(cgpa['high'] & po['medium'] & tech_contribution['medium'], demand['high']),
-    ctrl.Rule(cgpa['medium'] & po['medium'] & project_outcome['high'], demand['medium']),
-    ctrl.Rule(cgpa['low'] & feedback['poor'], demand['low']),
-    ctrl.Rule(tech_contribution['low'] & feedback['poor'], demand['low']),
-    ctrl.Rule(cgpa['medium'] & project_outcome['medium'] & feedback['average'], demand['medium']),
-    ctrl.Rule(po['low'] & tech_contribution['low'], demand['low']),
-    ctrl.Rule(cgpa['high'] & po['high'], demand['high']),
-    ctrl.Rule(project_outcome['high'] & feedback['excellent'], demand['high']),
-    ctrl.Rule(cgpa['medium'] & tech_contribution['medium'] & feedback['average'], demand['medium']),
-    ctrl.Rule(cgpa['low'] & po['medium'] & feedback['poor'], demand['low']),
-    ctrl.Rule(cgpa['medium'] & po['high'] & feedback['excellent'], demand['high']),
-    ctrl.Rule(cgpa['high'] & tech_contribution['high'] & project_outcome['high'], demand['high']),
+    # High demand (8)
+    ctrl.Rule(cgpa['high'] & po['high'] & tech_contribution['high'] & project_outcome['high'] & feedback['excellent'], demand['high']),
+    ctrl.Rule(cgpa['high'] & po['high'] & tech_contribution['high'] & project_outcome['medium'] & feedback['excellent'], demand['high']),
+    ctrl.Rule(cgpa['high'] & po['high'] & tech_contribution['medium'] & project_outcome['high'] & feedback['excellent'], demand['high']),
+    ctrl.Rule(cgpa['high'] & po['medium'] & tech_contribution['high'] & project_outcome['high'] & feedback['excellent'], demand['high']),
+    ctrl.Rule(cgpa['medium'] & po['high'] & tech_contribution['high'] & project_outcome['high'] & feedback['excellent'], demand['high']),
+    ctrl.Rule(cgpa['high'] & po['high'] & tech_contribution['high'] & project_outcome['high'] & feedback['average'], demand['high']),
+    ctrl.Rule(cgpa['high'] & po['high'] & tech_contribution['high'] & project_outcome['medium'] & feedback['average'], demand['high']),
+    ctrl.Rule(cgpa['high'] & po['high'] & tech_contribution['medium'] & project_outcome['high'] & feedback['average'], demand['high']),
+
+    # Medium demand (8)
+    ctrl.Rule(cgpa['high'] & po['medium'] & tech_contribution['medium'] & project_outcome['medium'] & feedback['average'], demand['medium']),
+    ctrl.Rule(cgpa['medium'] & po['high'] & tech_contribution['medium'] & project_outcome['medium'] & feedback['average'], demand['medium']),
+    ctrl.Rule(cgpa['medium'] & po['medium'] & tech_contribution['high'] & project_outcome['medium'] & feedback['average'], demand['medium']),
+    ctrl.Rule(cgpa['medium'] & po['medium'] & tech_contribution['medium'] & project_outcome['high'] & feedback['average'], demand['medium']),
+    ctrl.Rule(cgpa['high'] & po['medium'] & tech_contribution['medium'] & project_outcome['high'] & feedback['average'], demand['medium']),
+    ctrl.Rule(cgpa['medium'] & po['high'] & tech_contribution['high'] & project_outcome['medium'] & feedback['average'], demand['medium']),
+    ctrl.Rule(cgpa['medium'] & po['medium'] & tech_contribution['medium'] & project_outcome['medium'] & feedback['excellent'], demand['medium']),
+    ctrl.Rule(cgpa['high'] & po['medium'] & tech_contribution['medium'] & project_outcome['medium'] & feedback['poor'], demand['medium']),
+
+    # Low demand (4)
+    ctrl.Rule(cgpa['low'] & po['low'] & tech_contribution['low'] & project_outcome['low'] & feedback['poor'], demand['low']),
+    ctrl.Rule(cgpa['low'] & po['medium'] & tech_contribution['low'] & project_outcome['low'] & feedback['poor'], demand['low']),
+    ctrl.Rule(cgpa['medium'] & po['low'] & tech_contribution['low'] & project_outcome['low'] & feedback['poor'], demand['low']),
+    ctrl.Rule(cgpa['low'] & po['low'] & tech_contribution['medium'] & project_outcome['low'] & feedback['poor'], demand['low']),
 ]
 
 performance_ctrl = ctrl.ControlSystem(rules)
