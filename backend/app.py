@@ -1,4 +1,3 @@
-
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 import numpy as np
@@ -17,29 +16,36 @@ feedback = ctrl.Antecedent(np.arange(0, 3.1, 0.1), 'feedback')
 
 demand = ctrl.Consequent(np.arange(0, 10.1, 0.1), 'demand')
 
-cgpa['low'] = fuzz.trimf(cgpa.universe, [0, 0, 5])
-cgpa['medium'] = fuzz.trimf(cgpa.universe, [4, 6, 8])
-cgpa['high'] = fuzz.trimf(cgpa.universe, [7, 10, 10])
 
-po['low'] = fuzz.trimf(po.universe, [0, 0, 1])
-po['medium'] = fuzz.trimf(po.universe, [0.5, 1.5, 2.5])
-po['high'] = fuzz.trimf(po.universe, [2, 3, 3])
+sigma_0_10 = 2.1233  
 
-tech_contribution['low'] = fuzz.trimf(tech_contribution.universe, [0, 0, 1])
-tech_contribution['medium'] = fuzz.trimf(tech_contribution.universe, [0.5, 1.5, 2.5])
-tech_contribution['high'] = fuzz.trimf(tech_contribution.universe, [2, 3, 3])
+cgpa['low'] = fuzz.gaussmf(cgpa.universe, 0, sigma_0_10)
+cgpa['medium'] = fuzz.gaussmf(cgpa.universe, 5, sigma_0_10)
+cgpa['high'] = fuzz.gaussmf(cgpa.universe, 10, sigma_0_10)
 
-project_outcome['low'] = fuzz.trimf(project_outcome.universe, [0, 0, 1])
-project_outcome['medium'] = fuzz.trimf(project_outcome.universe, [0.5, 1.5, 2.5])
-project_outcome['high'] = fuzz.trimf(project_outcome.universe, [2, 3, 3])
+demand['low'] = fuzz.gaussmf(demand.universe, 0, sigma_0_10)
+demand['medium'] = fuzz.gaussmf(demand.universe, 5, sigma_0_10)
+demand['high'] = fuzz.gaussmf(demand.universe, 10, sigma_0_10)
 
-feedback['poor'] = fuzz.trimf(feedback.universe, [0, 0, 1])
-feedback['average'] = fuzz.trimf(feedback.universe, [0.5, 1.5, 2.5])
-feedback['excellent'] = fuzz.trimf(feedback.universe, [2, 3, 3])
 
-demand['low'] = fuzz.trimf(demand.universe, [0, 0, 5])
-demand['medium'] = fuzz.trimf(demand.universe, [4.5, 6.5, 8])
-demand['high'] = fuzz.trimf(demand.universe, [7.5, 10, 10])
+sigma_0_3 = 0.6370  
+
+po['low'] = fuzz.gaussmf(po.universe, 0, sigma_0_3)
+po['medium'] = fuzz.gaussmf(po.universe, 1.5, sigma_0_3)
+po['high'] = fuzz.gaussmf(po.universe, 3, sigma_0_3)
+
+tech_contribution['low'] = fuzz.gaussmf(tech_contribution.universe, 0, sigma_0_3)
+tech_contribution['medium'] = fuzz.gaussmf(tech_contribution.universe, 1.5, sigma_0_3)
+tech_contribution['high'] = fuzz.gaussmf(tech_contribution.universe, 3, sigma_0_3)
+
+project_outcome['low'] = fuzz.gaussmf(project_outcome.universe, 0, sigma_0_3)
+project_outcome['medium'] = fuzz.gaussmf(project_outcome.universe, 1.5, sigma_0_3)
+project_outcome['high'] = fuzz.gaussmf(project_outcome.universe, 3, sigma_0_3)
+
+feedback['poor'] = fuzz.gaussmf(feedback.universe, 0, sigma_0_3)
+feedback['average'] = fuzz.gaussmf(feedback.universe, 1.5, sigma_0_3)
+feedback['excellent'] = fuzz.gaussmf(feedback.universe, 3, sigma_0_3)
+
 
 rules = [
     # High demand (8)
@@ -60,7 +66,7 @@ rules = [
     ctrl.Rule(cgpa['high'] & po['medium'] & tech_contribution['medium'] & project_outcome['high'] & feedback['average'], demand['medium']),
     ctrl.Rule(cgpa['medium'] & po['high'] & tech_contribution['high'] & project_outcome['medium'] & feedback['average'], demand['medium']),
     ctrl.Rule(cgpa['medium'] & po['medium'] & tech_contribution['medium'] & project_outcome['medium'] & feedback['excellent'], demand['medium']),
-    ctrl.Rule(cgpa['high'] & po['medium'] & tech_contribution['medium'] & project_outcome['medium'] & feedback['poor'], demand['medium']),
+    ctrl.Rule(cgpa['high'] & po['medium'] & tech_contribution['medium'] & project_outcome['medium'] & feedback['poor'], demand['medium']),  # (logic kept as in original)
 
     # Low demand (4)
     ctrl.Rule(cgpa['low'] & po['low'] & tech_contribution['low'] & project_outcome['low'] & feedback['poor'], demand['low']),
@@ -84,6 +90,7 @@ def estimate():
 
     performance.compute()
     score = performance.output['demand']
+
     if score >= 8:
         category = "High Tech Demand"
     elif score >= 5:
