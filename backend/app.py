@@ -16,35 +16,41 @@ feedback = ctrl.Antecedent(np.arange(0, 3.1, 0.1), 'feedback')
 
 demand = ctrl.Consequent(np.arange(0, 10.1, 0.1), 'demand')
 
+# membership functions
+cgpa_mu = (2.5, 6.0, 8.5)
+cgpa_sigma = (1.3, 0.9, 1.1)
 
-sigma_0_10 = 2.1233  
+cgpa['low'] = fuzz.gaussmf(cgpa.universe, cgpa_mu[0], cgpa_sigma[0])
+cgpa['medium'] = fuzz.gaussmf(cgpa.universe, cgpa_mu[1], cgpa_sigma[1])
+cgpa['high'] = fuzz.gaussmf(cgpa.universe, cgpa_mu[2], cgpa_sigma[2])
 
-cgpa['low'] = fuzz.gaussmf(cgpa.universe, 0, sigma_0_10)
-cgpa['medium'] = fuzz.gaussmf(cgpa.universe, 5, sigma_0_10)
-cgpa['high'] = fuzz.gaussmf(cgpa.universe, 10, sigma_0_10)
+mu_small = (0.5, 1.5, 2.5)
+sigma_small = (0.35, 0.35, 0.35)
 
-demand['low'] = fuzz.gaussmf(demand.universe, 0, sigma_0_10)
-demand['medium'] = fuzz.gaussmf(demand.universe, 5, sigma_0_10)
-demand['high'] = fuzz.gaussmf(demand.universe, 10, sigma_0_10)
+po['low'] = fuzz.gaussmf(po.universe, mu_small[0], sigma_small[0])
+po['medium'] = fuzz.gaussmf(po.universe, mu_small[1], sigma_small[1])
+po['high'] = fuzz.gaussmf(po.universe, mu_small[2], sigma_small[2])
 
+tech_contribution['low'] = fuzz.gaussmf(tech_contribution.universe, mu_small[0], sigma_small[0])
+tech_contribution['medium'] = fuzz.gaussmf(tech_contribution.universe, mu_small[1], sigma_small[1])
+tech_contribution['high'] = fuzz.gaussmf(tech_contribution.universe, mu_small[2], sigma_small[2])
 
-sigma_0_3 = 0.6370  
+project_outcome['low'] = fuzz.gaussmf(project_outcome.universe, mu_small[0], sigma_small[0])
+project_outcome['medium'] = fuzz.gaussmf(project_outcome.universe, mu_small[1], sigma_small[1])
+project_outcome['high'] = fuzz.gaussmf(project_outcome.universe, mu_small[2], sigma_small[2])
 
-po['low'] = fuzz.gaussmf(po.universe, 0, sigma_0_3)
-po['medium'] = fuzz.gaussmf(po.universe, 1.5, sigma_0_3)
-po['high'] = fuzz.gaussmf(po.universe, 3, sigma_0_3)
+feedback['poor'] = fuzz.gaussmf(feedback.universe, mu_small[0], sigma_small[0])
+feedback['average'] = fuzz.gaussmf(feedback.universe, mu_small[1], sigma_small[1])
+feedback['excellent'] = fuzz.gaussmf(feedback.universe, mu_small[2], sigma_small[2])
 
-tech_contribution['low'] = fuzz.gaussmf(tech_contribution.universe, 0, sigma_0_3)
-tech_contribution['medium'] = fuzz.gaussmf(tech_contribution.universe, 1.5, sigma_0_3)
-tech_contribution['high'] = fuzz.gaussmf(tech_contribution.universe, 3, sigma_0_3)
+# Demand gaussian params
+demand_mu = (3.0, 6.5, 9.0)
+demand_sigma = (1.1, 0.9, 1.0)
 
-project_outcome['low'] = fuzz.gaussmf(project_outcome.universe, 0, sigma_0_3)
-project_outcome['medium'] = fuzz.gaussmf(project_outcome.universe, 1.5, sigma_0_3)
-project_outcome['high'] = fuzz.gaussmf(project_outcome.universe, 3, sigma_0_3)
+demand['low'] = fuzz.gaussmf(demand.universe, demand_mu[0], demand_sigma[0])
+demand['medium'] = fuzz.gaussmf(demand.universe, demand_mu[1], demand_sigma[1])
+demand['high'] = fuzz.gaussmf(demand.universe, demand_mu[2], demand_sigma[2])
 
-feedback['poor'] = fuzz.gaussmf(feedback.universe, 0, sigma_0_3)
-feedback['average'] = fuzz.gaussmf(feedback.universe, 1.5, sigma_0_3)
-feedback['excellent'] = fuzz.gaussmf(feedback.universe, 3, sigma_0_3)
 
 
 rules = [
